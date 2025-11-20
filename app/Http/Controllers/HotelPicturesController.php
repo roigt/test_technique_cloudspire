@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\HotelPhoto;
-use App\Http\Requests\StoreHotelPhotoRequest;
-use App\Http\Requests\UpdateHotelPhotoRequest;
+use App\Models\HotelPictures;
+use App\Http\Requests\StoreHotelPicturesRequest;
+use App\Http\Requests\UpdateHotelPicturesRequest;
 
-class gHotelPhotoController extends Controller
+class HotelPicturesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,7 +27,7 @@ class gHotelPhotoController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreHotelPhotoRequest $request)
+    public function store(StoreHotelPicturesRequest $request)
     {
         //
     }
@@ -35,7 +35,7 @@ class gHotelPhotoController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(HotelPhoto $hotelPhoto)
+    public function show(HotelPictures $hotelPictures)
     {
         //
     }
@@ -43,7 +43,7 @@ class gHotelPhotoController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(HotelPhoto $hotelPhoto)
+    public function edit(HotelPictures $hotelPictures)
     {
         //
     }
@@ -51,7 +51,7 @@ class gHotelPhotoController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateHotelPhotoRequest $request, HotelPhoto $hotelPhoto)
+    public function update(UpdateHotelPicturesRequest $request, HotelPictures $hotelPictures)
     {
         //
     }
@@ -59,7 +59,7 @@ class gHotelPhotoController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(HotelPhoto $hotelPhoto)
+    public function destroy(HotelPictures $hotelPictures)
     {
         //
     }

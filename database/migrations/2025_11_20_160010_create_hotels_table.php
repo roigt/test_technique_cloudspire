@@ -13,6 +13,17 @@ return new class extends Migration
     {
         Schema::create('hotels', function (Blueprint $table) {
             $table->id();
+            $table->string('name',255);
+            $table->string('address1');
+            $table->string('address2')->nullable();
+            $table->string('zipcode');
+            $table->string('city');
+            $table->string('country');
+            $table->float('lng');
+            $table->float('lat');
+            $table->text('description');
+            $table->integer('max_capacity');
+            $table->float('price_per_night');
             $table->timestamps();
         });
     }

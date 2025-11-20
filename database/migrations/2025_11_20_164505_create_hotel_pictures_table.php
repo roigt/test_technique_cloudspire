@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Hotel;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -11,8 +12,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('hotel_photos', function (Blueprint $table) {
+        Schema::create('hotel_pictures', function (Blueprint $table) {
             $table->id();
+            $table->foreignIdFor(Hotel::class);
+            $table->string('filepath');
+            $table->integer('filesize')->unsigned();
+            $table->integer('position');
             $table->timestamps();
         });
     }
@@ -22,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('hotel_photos');
+        Schema::dropIfExists('hotel_pictures');
     }
 };
