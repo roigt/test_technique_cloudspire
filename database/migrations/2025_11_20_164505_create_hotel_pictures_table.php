@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('hotel_pictures', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Hotel::class);
+            $table->foreignIdFor(Hotel::class)->constrained()->onDelete('cascade');
             $table->string('filepath');
             $table->integer('filesize')->unsigned();
             $table->integer('position');

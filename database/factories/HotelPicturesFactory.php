@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Hotel;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,10 @@ class HotelPicturesFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'hotel_id' =>Hotel::factory(),
+            'filepath' => $this->faker->imageUrl(),
+            'filesize' => $this->faker->numberBetween(1,100),
+            'position' => $this->faker->numberBetween(1,100),
         ];
     }
 }

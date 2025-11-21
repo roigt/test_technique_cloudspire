@@ -4,14 +4,14 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateHotelPicturesRequest extends FormRequest
+class HotelPicturesRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,10 @@ class UpdateHotelPicturesRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+//            'hotel_id' => ['required', 'exists:hotels,id'],
+//             'filepath' => ['required', 'string', 'max:2048'],
+//            'filesize' => ['required', 'integer', 'max:4096'],
+             'position' => ['required', 'integer'],
         ];
     }
 }

@@ -17,6 +17,12 @@ return Application::configure(basePath: dirname(__DIR__))
             HandleInertiaRequests::class,
             AddLinkHeadersForPreloadedAssets::class,
         ]);
+
+        $middleware->validateCsrfTokens(except: [
+            'api/*',
+            'http://api/hotels/*',
+        ]);
+
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
