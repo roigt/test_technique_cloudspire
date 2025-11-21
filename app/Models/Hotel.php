@@ -14,4 +14,8 @@ class Hotel extends Model
     public function pictures(){
         return $this->hasMany(HotelPictures::class);
     }
+
+    public function firstPictures(){
+        return $this->hasOne(HotelPictures::class)->orderBy('position');
+    }
 }

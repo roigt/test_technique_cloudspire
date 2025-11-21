@@ -66,7 +66,7 @@ class HotelController extends Controller
            'description'=>$request->input('description'),
            'price_per_night'=>$request->input('price_per_night'),
        ]);
-       return response()->json('created',201);
+       return response()->json('Hôtel créer avec succès',201);
     }
 
     /**
@@ -90,7 +90,7 @@ class HotelController extends Controller
      */
     public function update(HotelRequest $request, Hotel $hotel)
     {
-        $data=$request->validated();
+        $request->validated();
 
         $hotel->update([
             'name'=>$request->input('name'),
@@ -114,6 +114,6 @@ class HotelController extends Controller
     public function destroy(Hotel $hotel)
     {
         $hotel->delete();
-        return response()->json('deleted successfully!!',204);
+        return response()->json('Hôtel supprimé avec succès!!',200);
     }
 }

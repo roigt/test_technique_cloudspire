@@ -32,14 +32,13 @@ class HotelPicturesController extends Controller
     public function store(Request $request,Hotel $hotel)
     {
 
-
         $request->validate([
-
-            'position'=>['required','required', 'integer']
+            'image' => ['required','image','mimes:jpeg,png,webp','max:4096'],
+            'position'=>['required','integer', 'integer']
         ]);
 
         $fileSize=$request->file('image')->getSize()/1024 ; //kilo octet
-        $imagePath= $request->file('image')->store('images');
+        $imagePath= $request->file('image')->store('images','public');
 
         $picture=HotelPictures::create([
             'hotel_id'=>$hotel->id,
