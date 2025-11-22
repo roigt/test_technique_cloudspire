@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Hotel;
 use App\Models\HotelPictures;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 
 class HotelPicturesController extends Controller
@@ -108,11 +109,39 @@ class HotelPicturesController extends Controller
     }
 
     /**
+     * Endpoint pour réorganiser un ensemble de photo
+     * @param Request $request
+     * @param Hotel $hotel
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function reorder(Request $request, Hotel $hotel){
+        $validated=$request->validate([
+            'pictures' => ['required', 'array'],
+            'pictures.*.id' => [
+                'required',
+                'integer',
+                Rule::exists('hotel_pictures', 'id')->where('hotel_id', $hotel->id)
+            ],
+            'pictures.*.position' => ['required', 'integer', 'min:1'],
+        ]);
+
+        foreach($validated['pictures'] as $picture){
+            HotelPictures::where('hotel_id',$hotel->id)
+                ->where('id',$picture['id'])
+                ->update(['position'=>$picture['position']]);
+        }
+
+        return response()->json([
+            'success'=>'Réorganisation de la position des images éffectuée avec succès.',
+        ]);
+    }
+
+    /**
      * Remove the specified resource from storage.
      */
     public function destroy(Hotel $hotel, HotelPictures $picture)
     {
-        if($picture->hotel_id !== $hotel->id) return response()->json(['error'=>'This image has not been belongs to this hotel.']);
+        if($picture->hotel_id !== $hotel->id) return response()->json(['error'=>'Cette image n appartient pas à cet hôtel.']);
 
         if($picture->filepath && Storage::disk('public')->exists($picture->filepath)){
             Storage::disk('public')->delete($picture->filepath);

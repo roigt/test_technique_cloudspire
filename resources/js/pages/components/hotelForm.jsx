@@ -24,9 +24,16 @@ export default function HotelForm({initialValues,onSubmit, title}){
     return (
         <Center m={10} p={10}  >
 
-            <Box w="50%" backgroundColor={'blue.300'} p={10} borderRadius={5}>
+            <Box w="50%" backgroundColor={'whitesmoke'} p={10} borderRadius={35} boxShadow='2xl'>
                 <Center>
-                    <Text fontSize='4xl'>{title}</Text>
+                    <Text
+                        bgGradient='linear(to-l, #7928CA, #FF0080)'
+                        bgClip='text'
+                        fontSize='3xl'
+                        fontWeight='bold'
+                    >
+                        {title}
+                    </Text>
                 </Center>
                 <Formik
 
@@ -73,11 +80,14 @@ export default function HotelForm({initialValues,onSubmit, title}){
                 >
                     {(props) => (
                         <Form>
-                            <Field name='name'>
+                            <Field name='name'  >
                                 {({ field, form }) => (
                                     <FormControl isInvalid={form.errors.name && form.touched.name}>
                                         <FormLabel>First name</FormLabel>
-                                        <Input {...field} placeholder='name' />
+                                        <Input {...field} placeholder='name'
+                                               backgroundColor={'purple.50'}
+                                               borderRadius={25}
+                                        />
                                         <FormErrorMessage>{form.errors.name}</FormErrorMessage>
                                     </FormControl>
                                 )}
@@ -86,7 +96,10 @@ export default function HotelForm({initialValues,onSubmit, title}){
                                 {({ field, form }) => (
                                     <FormControl isInvalid={form.errors.address1 && form.touched.address1}>
                                         <FormLabel>Adresse 1</FormLabel>
-                                        <Input{...field} placeholder='address1' />
+                                        <Input{...field} placeholder='address1'
+                                              backgroundColor={'purple.50'}
+                                              borderRadius={25}
+                                        />
                                         <FormErrorMessage>{form.errors.address1}</FormErrorMessage>
                                     </FormControl>
                                 )}
@@ -95,7 +108,10 @@ export default function HotelForm({initialValues,onSubmit, title}){
                                 {({ field, form }) => (
                                     <FormControl isInvalid={form.errors.address2 && form.touched.address2}>
                                         <FormLabel>Adresse 2</FormLabel>
-                                        <Input {...field} placeholder='address2' />
+                                        <Input {...field} placeholder='address2'
+                                               backgroundColor={'purple.50'}
+                                               borderRadius={25}
+                                        />
                                         <FormErrorMessage>{form.errors.address2}</FormErrorMessage>
                                     </FormControl>
                                 )}
@@ -104,7 +120,10 @@ export default function HotelForm({initialValues,onSubmit, title}){
                                 {({ field, form }) => (
                                     <FormControl isInvalid={form.errors.zipcode && form.touched.zipcode}>
                                         <FormLabel>ZipCode</FormLabel>
-                                        <Input {...field} placeholder='zipcode' />
+                                        <Input {...field} placeholder='zipcode'
+                                               backgroundColor={'purple.50'}
+                                               borderRadius={25}
+                                        />
                                         <FormErrorMessage>{form.errors.zipcode}</FormErrorMessage>
                                     </FormControl>
                                 )}
@@ -113,7 +132,10 @@ export default function HotelForm({initialValues,onSubmit, title}){
                                 {({ field, form }) => (
                                     <FormControl isInvalid={form.errors.city && form.touched.city}>
                                         <FormLabel>City</FormLabel>
-                                        <Input {...field} placeholder='city' />
+                                        <Input {...field} placeholder='city'
+                                               backgroundColor={'purple.50'}
+                                               borderRadius={25}
+                                        />
                                         <FormErrorMessage>{form.errors.city}</FormErrorMessage>
                                     </FormControl>
                                 )}
@@ -122,7 +144,10 @@ export default function HotelForm({initialValues,onSubmit, title}){
                                 {({ field, form }) => (
                                     <FormControl isInvalid={form.errors.country && form.touched.country}>
                                         <FormLabel>Country</FormLabel>
-                                        <Input {...field} placeholder='country' />
+                                        <Input {...field} placeholder='country'
+                                               backgroundColor={'purple.50'}
+                                               borderRadius={25}
+                                        />
                                         <FormErrorMessage>{form.errors.country}</FormErrorMessage>
                                     </FormControl>
                                 )}
@@ -131,7 +156,10 @@ export default function HotelForm({initialValues,onSubmit, title}){
                                 {({ field, form }) => (
                                     <FormControl isInvalid={form.errors.lng && form.touched.lng}>
                                         <FormLabel>Longitude</FormLabel>
-                                        <Input type="number" {...field} placeholder='lng' />
+                                        <Input type="number" {...field} placeholder='lng'
+                                               backgroundColor={'purple.50'}
+                                               borderRadius={25}
+                                        />
                                         <FormErrorMessage>{form.errors.lng}</FormErrorMessage>
                                     </FormControl>
                                 )}
@@ -140,7 +168,10 @@ export default function HotelForm({initialValues,onSubmit, title}){
                                 {({ field, form }) => (
                                     <FormControl isInvalid={form.errors.lat && form.touched.lat}>
                                         <FormLabel>Latitude</FormLabel>
-                                        <Input type="number" {...field} placeholder='lat' />
+                                        <Input type="number" {...field} placeholder='lat'
+                                               backgroundColor={'purple.50'}
+                                               borderRadius={25}
+                                        />
                                         <FormErrorMessage>{form.errors.lat}</FormErrorMessage>
                                     </FormControl>
                                 )}
@@ -151,7 +182,8 @@ export default function HotelForm({initialValues,onSubmit, title}){
                                         <FormLabel>Description</FormLabel>
                                         <Textarea
                                             {...field} placeholder='description'
-
+                                            backgroundColor={'purple.50'}
+                                            borderRadius={25}
                                         ></Textarea>
                                         <FormErrorMessage>{form.errors.description}</FormErrorMessage>
                                     </FormControl>
@@ -161,7 +193,10 @@ export default function HotelForm({initialValues,onSubmit, title}){
                                 {({ field, form }) => (
                                     <FormControl isInvalid={form.errors.max_capacity && form.touched.max_capacity}>
                                         <FormLabel>max_capacity</FormLabel>
-                                        <Input {...field} type="number" placeholder='max_capacity'/>
+                                        <Input {...field} type="number" placeholder='max_capacity'
+                                               backgroundColor={'purple.50'}
+                                               borderRadius={25}
+                                        />
                                         <FormErrorMessage>{form.errors.max_capacity}</FormErrorMessage>
                                     </FormControl>
                                 )}
@@ -170,7 +205,10 @@ export default function HotelForm({initialValues,onSubmit, title}){
                                 {({ field, form }) => (
                                     <FormControl isInvalid={form.errors.price_per_night && form.touched.price_per_night}>
                                         <FormLabel>price_per_night</FormLabel>
-                                        <Input type="number"  {...field} placeholder='price_per_night' />
+                                        <Input type="number"  {...field} placeholder='price_per_night'
+                                               backgroundColor={'purple.50'}
+                                               borderRadius={25}
+                                        />
                                         <FormErrorMessage>{form.errors.price_per_night}</FormErrorMessage>
                                     </FormControl>
                                 )}
@@ -179,16 +217,17 @@ export default function HotelForm({initialValues,onSubmit, title}){
                                 mt={4}
                                 marginRight={10}
                                 colorScheme='red'
-                                isLoading={props.isSubmitting}
+                                borderRadius={20}
                                 onClick={() => router.visit(`/hotels/`)}
                             >
                                 Annuler
                             </Button>
                             <Button
                                 mt={4}
-                                colorScheme='green'
+                                colorScheme='purple'
                                 isLoading={props.isSubmitting}
                                 type='submit'
+                                borderRadius={20}
                             >
                                 Soumettre
                             </Button>

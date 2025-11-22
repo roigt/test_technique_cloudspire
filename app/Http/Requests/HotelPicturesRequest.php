@@ -22,9 +22,9 @@ class HotelPicturesRequest extends FormRequest
     public function rules(): array
     {
         return [
-//            'hotel_id' => ['required', 'exists:hotels,id'],
+//             'hotel_id' => ['required', 'exists:hotels,id'],
 //             'filepath' => ['required', 'string', 'max:2048'],
-//            'filesize' => ['required', 'integer', 'max:4096'],
+//             'filesize' => ['required', 'integer', 'max:4096'],
              'position' => ['required', 'integer'],
         ];
     }

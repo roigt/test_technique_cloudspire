@@ -5,46 +5,44 @@ namespace App\Http\Controllers\pages;
 use App\Http\Controllers\Controller;
 use App\Models\Hotel;
 use Inertia\Inertia;
-use Inertia\Response;
+
 
 class HotelPage extends Controller
 {
     /**
-     * Show the profile for a given user.
+     * Afficher la page d'affichage d'hôtel sous forme tableai
      */
-    public function index()
-    {
-
-        return Inertia::render('index', [
-            'hotels'=> Hotel::with('pictures')->get()
-            ->map(function($hotel){
-                return [
-                    'id' => $hotel->id,
-                    'name' => $hotel->name,
-                    'city' => $hotel->city,
-                    'description' => $hotel->description,
-                    'max_capacity' => $hotel->max_capacity,
-                    'firstPictures' => $hotel->pictures->first()
-                        ? asset('storage/'.$hotel->pictures->first()->filepath)
-                        : null,
-                ];
-            })
-        ]);
+    public function index(){
+        return Inertia::render('hotels/home');
     }
 
+    /**
+     * affichage des détails d'un hôtel
+     * @param $id
+     * @return \Inertia\Response
+     */
     public function show($id){
         $hotel = Hotel::with('pictures')->findOrFail($id);
-        return Inertia::render('detail', [
+        return Inertia::render('hotels/detail', [
             'hotel' => $hotel
         ]);
     }
 
+    /**
+     * Afficher le formulaire de création d'un hôtel
+     * @return \Inertia\Response
+     */
     public function create(){
-        return Inertia::render('create');
+        return Inertia::render('hotels/create');
     }
 
+    /**
+     * Afficher le formulaire de modification d 'un hotel
+     * @param $id
+     * @return \Inertia\Response
+     */
     public function update($id){
         $hotel = Hotel::with('pictures')->findOrFail($id);
-        return Inertia::render('update', ['hotel'=>$hotel]);
+        return Inertia::render('hotels/update', ['hotel'=>$hotel]);
     }
 }

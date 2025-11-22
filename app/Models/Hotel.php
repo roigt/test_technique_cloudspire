@@ -15,7 +15,14 @@ class Hotel extends Model
         return $this->hasMany(HotelPictures::class);
     }
 
-    public function firstPictures(){
-        return $this->hasOne(HotelPictures::class)->orderBy('position');
+    public function firstPicture(){
+        return $this->hasOne(HotelPictures::class)->ofMany('position','min');
+    }
+
+    public function getFirstPictureUrlAttribute(){
+        if(!$this->firstPictures()){
+            return null;
+        }
+        return asset('storage/'.$this->firstPicture->filepath);
     }
 }

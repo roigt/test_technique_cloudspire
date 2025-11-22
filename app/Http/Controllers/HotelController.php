@@ -9,17 +9,21 @@ use Illuminate\Http\Request;
 class HotelController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Endpoint qui retourne la liste des hôtels en fonction des filtres de requêtes
      */
     public function index(Request $request)
     {
-        $query=Hotel::query();
+        $query=Hotel::with('pictures');
 
         //filtre par q sur name ou city
         if($request->filled('q')){
             $q=$request->input('q');
-            $query->where('name','like',"%{$q}%")
-                  ->orWhere('city','like',"%{$q}%");
+
+            $query->where(function($subQuery) use ($q){
+                $subQuery->where('name','like','%'.$q.'%')
+                         ->orWhere('city','like','%'.$q.'%');
+            });
+
         }
 
         //Tri selon le nom et l'ordre croissant
@@ -32,20 +36,13 @@ class HotelController extends Controller
         }
 
         //pagination
-        $perPage=$request->input('per_page',10);
+        $perPage=$request->input('per_page',5);
         $hotels=$query->paginate($perPage);
 
         return response()->json($hotels);
 
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -70,23 +67,16 @@ class HotelController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Endpoint qui retourne un hôtel grâce à son id
      */
     public function show(Hotel $hotel)
     {
         return response()->json($hotel);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Hotel $hotel)
-    {
-        //
-    }
 
     /**
-     * Update the specified resource in storage.
+     * Endpoint qui permet de modifier les informations d'un hôtel
      */
     public function update(HotelRequest $request, Hotel $hotel)
     {
@@ -105,11 +95,11 @@ class HotelController extends Controller
             'description'=>$request->input('description'),
             'price_per_night'=>$request->input('price_per_night'),
         ]);
-        return response()->json('updated successfully!!',200);
+        return response()->json('Hôtel modifié avec succès!!',200);
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Endpoint pour supprimer un hôtel
      */
     public function destroy(Hotel $hotel)
     {

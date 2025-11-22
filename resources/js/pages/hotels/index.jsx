@@ -1,4 +1,4 @@
-import { usePage } from '@inertiajs/react';
+
 import {
     Table,
     Thead,
@@ -24,7 +24,7 @@ import {
     AlertDialogHeader,
     AlertDialog,
     useDisclosure,
-    useToast,
+    useToast, Center,
 } from '@chakra-ui/react';
 import axios from 'axios';
 import { router } from '@inertiajs/react';
@@ -41,11 +41,20 @@ export default function Index({hotels:initialHotels}) {
 
     //suivre l'état des hotels
     const [hotels,setHotels] = useState(initialHotels);
-
+    const [pagination,setPagination]=useState({});
+    const [page, setPage]=useState(1);
 
     useEffect(() => {
-       setHotels(initialHotels);
+        //fetchHotels().then(r=>"");
+        setHotels(initialHotels);
     }, [initialHotels]);
+
+    const fetchHotels = async(page=1)=>{
+        const response =await axios.get(`http://localhost:8000/api/hotels?page=${page}`);
+        setHotels(response.data.data)
+        setPagination(response.data)
+        setPage(page)
+    };
 
 
 
@@ -62,7 +71,6 @@ export default function Index({hotels:initialHotels}) {
             })
 
         }catch(error){
-            console.log(error)
             toast({
                 title:`Erreur lors de la suppression de l'hôtel`,
                 status: 'error',
@@ -72,9 +80,12 @@ export default function Index({hotels:initialHotels}) {
         }
     }
 
+
+
     return (
         <>
-            <div>
+
+            <Box>
                 <Breadcrumb fontWeight="medium" fontSize="md" h={100} backgroundColor={'blue.200'}>
                     <BreadcrumbItem>
                         <BreadcrumbLink href="#">Home</BreadcrumbLink>
@@ -92,9 +103,18 @@ export default function Index({hotels:initialHotels}) {
 
                     />
                 </Breadcrumb>
-            </div>
+            </Box>
 
-            <div>
+            <Center>
+                <Button m={10}
+                        onClick={()=>fetchHotels(page - 1)}
+                > Précédent</Button>
+                <Button
+
+                         onClick={() => fetchHotels(page + 1)}
+                >Suivant </Button>
+            </Center>
+            <Box>
                 <TableContainer>
                     <Table size="lg">
                         <Thead>
@@ -120,8 +140,8 @@ export default function Index({hotels:initialHotels}) {
                                             borderRadius='full'
                                             boxSize='100px'
                                             objectFit='cover'
-                                            src={hotel.firstPictures}
-                                            alt=''
+                                            src= {hotel.firstPictures}
+                                            alt=""
                                         />
                                     </Td>
                                     <Td>{hotel.name}</Td>
@@ -158,7 +178,7 @@ export default function Index({hotels:initialHotels}) {
                         </Tbody>
                     </Table>
                 </TableContainer>
-            </div>
+            </Box>
 
             {/* Boite de dialogue de confirmation de suppression d un hôtel */}
             <AlertDialog
@@ -196,6 +216,7 @@ export default function Index({hotels:initialHotels}) {
                 </AlertDialogOverlay>
             </AlertDialog>
             {/* fin boite de dialogue de suppression d'hotel*/}
+
         </>
     );
 }

@@ -16,6 +16,7 @@
         "laravel/wayfinder": "^0.1.11"
     },
     "require-dev": {
+        "barryvdh/laravel-debugbar": "*",
         "fakerphp/faker": "^1.23",
         "laravel/boost": "^1.1",
         "laravel/pail": "^1.2.2",
