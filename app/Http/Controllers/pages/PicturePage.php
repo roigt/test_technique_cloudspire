@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers\pages;
 
+use App\Helpers\ExceptionController;
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\HotelPicturesController;
-use App\Models\Hotel;
 use App\Models\HotelPictures;
 use Inertia\Inertia;
 
@@ -23,9 +22,12 @@ class PicturePage extends  Controller
     }
 
    public function create($id){
-        $maxPosition = HotelPictures::where('hotel_id', $id)
-            ->max('position');
-        $nextPosition = $maxPosition? $maxPosition + 1 :1;
+
+       $nextPosition = ExceptionController::run(function() use($id){
+           $maxPosition=HotelPictures::where('hotel_id', $id)
+               ->max('position'); //trouver la position du dernier image
+           return  $maxPosition? $maxPosition + 1 :1;//et l'incrémenter pour ajouter une nouvelle photo . Si on ne trouve rien on débute à 1
+       },1);
 
         return Inertia::render('pictures/create', [
             'hotelId' => $id,
@@ -34,7 +36,7 @@ class PicturePage extends  Controller
    }
 
    public function update($id,$pictureId){
-       $image= HotelPictures::findOrFail($pictureId);
+       $image= HotelPictures::find($pictureId);
 
        return Inertia::render('pictures/update', [
            'hotelId' => $id,

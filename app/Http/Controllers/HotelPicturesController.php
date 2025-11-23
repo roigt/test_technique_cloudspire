@@ -103,7 +103,7 @@ class HotelPicturesController extends Controller
         ]);
 
         return  response()->json([
-            'success'=>'You have successfully update an image.',
+            'success'=>"Modification de l'image éffectuée avec succes!!",
             'data'=> $picture->fresh()
         ],200);
     }

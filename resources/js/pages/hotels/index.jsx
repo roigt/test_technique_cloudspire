@@ -158,7 +158,7 @@ export default function Index({hotels:initialHotels}) {
                                             colorScheme='orange'
                                             onClick={() => router.visit(`/hotels/${hotel.id}/update`)}
                                         >
-                                            Modifier
+                                            +Modifiers
                                         </Button>
                                     </Td>
                                     <Td>

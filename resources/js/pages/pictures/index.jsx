@@ -110,7 +110,6 @@ export default function Index({ pictures: initialPictures, hotelId }) {
         <Box p={4}>
             <Center>
                 <Text
-
                       fontSize="xl"
                       fontWeight="bold"
                       mb={4}>
@@ -172,7 +171,7 @@ export default function Index({ pictures: initialPictures, hotelId }) {
 }
 
 
-function PictureItem({ picture, index, saving,deleteImage,onOpen,setSelectedHotel,setSelectedImage,hotelId }) {
+function PictureItem({ picture, index, saving,onOpen,setSelectedHotel,setSelectedImage,hotelId }) {
     const controls = useDragControls();
 
     return (

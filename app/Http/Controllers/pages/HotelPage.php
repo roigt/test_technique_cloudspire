@@ -17,7 +17,7 @@ class HotelPage extends Controller
     }
 
     /**
-     * affichage des détails d'un hôtel
+     * Affichage des détails d'un hôtel
      * @param $id
      * @return \Inertia\Response
      */

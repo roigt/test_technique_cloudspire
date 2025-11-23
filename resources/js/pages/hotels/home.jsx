@@ -19,15 +19,16 @@ import {
     Thead,
     Tr,
     useDisclosure,
-    useToast, Wrap, WrapItem
+    useToast
 } from '@chakra-ui/react';
 import {  useEffect, useRef, useState } from 'react';
 import axios from 'axios';
-import { router } from '@inertiajs/react';
+import { router,   } from '@inertiajs/react';
 import Header from '../components/header.jsx';
 import {getMainImage} from '../utils/hotelUtils.js';
 import { ArrowBackIcon, ArrowForwardIcon, DeleteIcon } from '@chakra-ui/icons';
 export default function Home() {
+
 
     //toast bouton suppression d'hotel
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -118,7 +119,7 @@ export default function Home() {
 
 
     return (
-        <>
+        <Box>
             {/* Header */}
             <Header showSearch={true} searchQuery={searchQuery} onSearchChange={searchBar} />
             {/* Fin Header */}
@@ -168,14 +169,24 @@ export default function Home() {
                                         <Link href={`/hotels/${hotel.id}`}>
                                             <Button m={5}>Detail</Button>
                                         </Link>
+                                        {
+                                            (() => {//afficher l'image que quand l'hotel a déja une image principale
+                                                const firstImage = getMainImage(hotel);
+                                                return firstImage?.id ? (
+                                                    <Image
+                                                        borderRadius="full"
+                                                        boxSize="100px"
+                                                        objectFit="cover"
+                                                        src={`http://localhost:8000/storage/${firstImage?.filepath}`}
+                                                        alt="image"
+                                                    />
+                                                ) : (
+                                                    <Text fontSize={20}>Pas d'image</Text>
+                                                );
+                                            })()
+                                        }
 
-                                        <Image
-                                            borderRadius="full"
-                                            boxSize="100px"
-                                            objectFit="cover"
-                                            src={`http://localhost:8000/storage/${getMainImage(hotel)?.filepath}`}
-                                            alt="image"
-                                        />
+
                                     </Td>
                                     <Td>{hotel.name}</Td>
                                     <Td>
@@ -216,18 +227,31 @@ export default function Home() {
 
                                     <Td>
                                         <Box display="grid" gridTemplateColumns="repeat(2, 1fr)" gap="8px">
-                                            <Button w="100px" colorScheme="yellow" onClick={() => router.visit(`hotel/${hotel.id}/picture`)}>
-                                                + photo
-                                            </Button>
-                                            <Button
-                                                w="100px"
-                                                colorScheme="green"
-                                                onClick={() => router.visit(`hotel/${hotel.id}/picture/${getMainImage(hotel).id}`)}
+                                            <Button w="100px" colorScheme="yellow"
+                                                    onClick={() => router.visit(`${hotel.id}/picture/`)}
                                             >
-                                                + Modifier
+                                                + Créer
                                             </Button>
-                                            <Button colorScheme="purple" onClick={() => router.visit(`/hotel/${hotel.id}/pictures`)}>
-                                                ordre
+
+                                            {
+                                                (() => {//afficher le bouton modifier que quand l'hotel a déja une image principale
+                                                    const firstImage = getMainImage(hotel);
+                                                    return firstImage?.id ? (
+                                                        <Button
+                                                            w="100px"
+                                                            colorScheme="green"
+                                                            onClick={() => router.visit( `${hotel.id}/picture/${firstImage.id}`)}
+                                                        >
+                                                            +Modifier
+                                                        </Button>
+                                                    ) : (
+                                                        <p></p>
+                                                    );
+                                                })()
+                                            }
+
+                                            <Button colorScheme="purple" onClick={() => router.visit(`${hotel.id}/pictures`)}>
+                                                ordonner
                                             </Button>
                                         </Box>
                                     </Td>
@@ -251,7 +275,7 @@ export default function Home() {
 
                         <AlertDialogFooter>
                             <Button ref={cancelRef} onClick={onClose}>
-                                Cancel
+                                Annuler
                             </Button>
                             <Button
                                 colorScheme="red"
@@ -261,13 +285,13 @@ export default function Home() {
                                     onClose();
                                 }}
                             >
-                                Delete
+                                Supprimer
                             </Button>
                         </AlertDialogFooter>
                     </AlertDialogContent>
                 </AlertDialogOverlay>
             </AlertDialog>
             {/* fin boite de dialogue de suppression d'hotel*/}
-        </>
+        </Box>
     );
 }

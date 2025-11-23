@@ -5,6 +5,9 @@ import laravel from 'laravel-vite-plugin';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
+    build: {
+        sourcemap: true,
+    },
     plugins: [
         laravel({
             input: ['resources/css/app.css', 'resources/js/app.tsx'],
@@ -13,11 +16,14 @@ export default defineConfig({
         }),
         react(),
         tailwindcss(),
-        wayfinder({
-            formVariants: true,
-        }),
-    ],
+        process.env.WAYFINDER_ENABLED === 'false'
+            ? null
+            : wayfinder({
+                formVariants: true,
+            }),
+    ].filter(Boolean),
     esbuild: {
         jsx: 'automatic',
     },
+
 });

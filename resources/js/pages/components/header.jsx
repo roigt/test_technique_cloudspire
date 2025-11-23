@@ -6,26 +6,26 @@ export default function Header({showSearch=false,searchQuery,onSearchChange= ()=
 
    return (
        <Box>
-           <Breadcrumb fontWeight="medium" fontSize="md" h={100} backgroundColor={'blue.200'}>
-
-                   <Button
-                       color='white'
-                       fontWeight='bold'
-                       borderRadius='md'
-                       bgGradient='linear(to-r, teal.500, green.500)'
-                       _hover={{
-                           bgGradient: 'linear(to-r, red.500, yellow.500)',
-                       }}
-                       m="10px"
-                       onClick={() => router.visit(`/hotels`)}
-                   >
-                       Home
-                   </Button>
-
+           <Breadcrumb fontWeight="medium" fontSize="md" h={100} backgroundColor={'blue.200'} separator=' '>
+                 <BreadcrumbItem >
+                     <Button
+                         color='white'
+                         fontWeight='bold'
+                         borderRadius='md'
+                         bgGradient='linear(to-r, teal.500, green.500)'
+                         _hover={{
+                             bgGradient: 'linear(to-r, red.500, yellow.500)',
+                         }}
+                         m="10px"
+                         onClick={() => router.visit(`/hotels`)}
+                     >
+                         Home
+                     </Button>
+                 </BreadcrumbItem>
 
                <Spacer />
                {showSearch && (
-                  <>
+                  <Box>
                       <Input
                           placeholder='taper quelque chose à rechercher...'
                           size='md'
@@ -35,7 +35,7 @@ export default function Header({showSearch=false,searchQuery,onSearchChange= ()=
                           value={searchQuery}
                           onChange={(e)=>onSearchChange(e.target.value)}
                       />
-                  </>
+                  </Box>
                )}
 
            </Breadcrumb>
