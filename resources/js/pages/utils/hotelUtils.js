@@ -7,3 +7,5 @@ export const getMainImage=(hotel) =>{
             return current.position < min.position ? current : min;
         });
 };
+
+

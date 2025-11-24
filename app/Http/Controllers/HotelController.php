@@ -6,6 +6,7 @@ use App\Http\Requests\HotelRequest;
 use App\Models\Hotel;
 use Illuminate\Http\Request;
 
+
 class HotelController extends Controller
 {
     /**
@@ -13,7 +14,7 @@ class HotelController extends Controller
      */
     public function index(Request $request)
     {
-        $query=Hotel::with('pictures');
+        $query=Hotel::with('pictures')->latest();
 
         //filtre par q sur name ou city
         if($request->filled('q')){
@@ -42,6 +43,7 @@ class HotelController extends Controller
         return response()->json($hotels);
 
     }
+
 
 
     /**

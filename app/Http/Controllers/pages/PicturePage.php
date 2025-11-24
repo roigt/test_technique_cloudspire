@@ -36,7 +36,7 @@ class PicturePage extends  Controller
    }
 
    public function update($id,$pictureId){
-       $image= HotelPictures::find($pictureId);
+       $image= HotelPictures::findOrFail($pictureId);
 
        return Inertia::render('pictures/update', [
            'hotelId' => $id,

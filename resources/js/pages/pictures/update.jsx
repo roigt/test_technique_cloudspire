@@ -6,7 +6,7 @@ import Header from '@/pages/components/header.jsx';
 export default function Update({hotelId,pictureId,image}) {
 
     const handleSubmit=async (formData)=>{
-        await axios.post(`/api/hotels/${hotelId}/pictures/${pictureId}`, formData, {
+        return await axios.post(`/api/hotels/${hotelId}/pictures/${pictureId}`, formData, {
             headers:{ 'Content-Type': 'multipart/form-data' }
         });
     }
@@ -15,11 +15,12 @@ export default function Update({hotelId,pictureId,image}) {
         image: image.filepath,
         position:image.position,
     }
+    console.log(old_values);
     return <Box>
                 <Header
                     showSearch={false}
                 />
-                <HotelPictureForm title="Modifier Image de l'hôtel" onSubmit={handleSubmit} initialValues={old_values} />
+                <HotelPictureForm title="Modifier Image de l'hôtel" onSubmit={handleSubmit} initialValues={old_values}  />
            </Box>
 
 }

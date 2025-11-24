@@ -1,5 +1,5 @@
 import { Box, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Button, Input, Spacer } from '@chakra-ui/react';
-import { router } from '@inertiajs/react';
+import { Link, router } from '@inertiajs/react';
 
 
 export default function Header({showSearch=false,searchQuery,onSearchChange= ()=>{}}){
@@ -8,19 +8,21 @@ export default function Header({showSearch=false,searchQuery,onSearchChange= ()=
        <Box>
            <Breadcrumb fontWeight="medium" fontSize="md" h={100} backgroundColor={'blue.200'} separator=' '>
                  <BreadcrumbItem >
-                     <Button
-                         color='white'
-                         fontWeight='bold'
-                         borderRadius='md'
-                         bgGradient='linear(to-r, teal.500, green.500)'
-                         _hover={{
-                             bgGradient: 'linear(to-r, red.500, yellow.500)',
-                         }}
-                         m="10px"
-                         onClick={() => router.visit(`/hotels`)}
-                     >
-                         Home
-                     </Button>
+                     <Link href={`/hotels/`} prefetch>
+                         <Button
+                             color='white'
+                             fontWeight='bold'
+                             borderRadius='md'
+                             bgGradient='linear(to-r, teal.500, green.500)'
+                             _hover={{
+                                 bgGradient: 'linear(to-r, red.500, yellow.500)',
+                             }}
+                             m="10px"
+                         >
+                             Home
+                         </Button>
+                     </Link>
+
                  </BreadcrumbItem>
 
                <Spacer />

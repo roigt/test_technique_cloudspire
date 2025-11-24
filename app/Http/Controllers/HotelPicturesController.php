@@ -49,26 +49,12 @@ class HotelPicturesController extends Controller
         ]);
 
         return response()->json([
-            'success'=>'You have successfully uploaded an image.',
-            'data'=> $picture
+            'message'=>'Enrégistrement de l image éffectué avec succes!!',
+            'data'=> $picture,
+            'status'=>201
         ]);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(HotelPictures $hotelPictures)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(HotelPictures $hotelPictures)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
@@ -103,8 +89,8 @@ class HotelPicturesController extends Controller
         ]);
 
         return  response()->json([
-            'success'=>"Modification de l'image éffectuée avec succes!!",
-            'data'=> $picture->fresh()
+            'message'=>"Modification de l'image éffectuée avec succes!!",
+            'data'=> $picture->fresh(),
         ],200);
     }
 
@@ -132,7 +118,8 @@ class HotelPicturesController extends Controller
         }
 
         return response()->json([
-            'success'=>'Réorganisation de la position des images éffectuée avec succès.',
+            'message'=>'Réorganisation de la position des images éffectuée avec succès.',
+            'status'=>200
         ]);
     }
 
@@ -148,6 +135,6 @@ class HotelPicturesController extends Controller
         }
 
         $picture->delete();
-        return response()->json(['success'=>'You have successfully deleted an image.']);
+        return response()->json(['message'=>'Suppression de l image éffectuée avec succès!!']);
     }
 }

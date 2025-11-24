@@ -257,7 +257,7 @@ Route::get('/users', function () {
 <code-snippet name="Inertia Client Navigation" lang="react">
 
 import { Link } from '@inertiajs/react'
-<Link href="/">Home</Link>
+<Link href="/">Index</Link>
 
 </code-snippet>
 

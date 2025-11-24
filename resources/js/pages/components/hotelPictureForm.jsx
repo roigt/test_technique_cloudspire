@@ -1,6 +1,6 @@
 import { Box, Button, Center, FormControl, FormErrorMessage, FormLabel, Input, Text, Toast, useToast } from '@chakra-ui/react';
 import { Field, Form, Formik } from 'formik';
-import { router } from '@inertiajs/react';
+import { Link, router } from '@inertiajs/react';
 
 
 export default function HotelPictureForm({title,initialValues,onSubmit,nextPos}) {
@@ -10,7 +10,7 @@ export default function HotelPictureForm({title,initialValues,onSubmit,nextPos})
 
     const defaultValues = {
         image:null,
-        position:nextPos
+        position:nextPos //position suivante après le dernier image uploadé
     }
 
     const handleSubmit =async (values,actions) => {
@@ -18,17 +18,20 @@ export default function HotelPictureForm({title,initialValues,onSubmit,nextPos})
         try{
             const formData = new FormData();
             formData.append('image', values.image);
-            formData.append('position', nextPos);
+            formData.append('position', values.position);
             const response = await onSubmit(formData);
 
-
-            toast({
-                title:`Photo Créer avec succès!!`,
+           //confirmation de succès
+           toast({
+                title:`${response.data.message}`,
                 status:"success",
                 position:'top-right',
                 duration:3000,
-                isClosable:true
-            })
+                isClosable:true,
+                onCloseComplete: () => router.visit('/hotels')
+            });
+
+
         }catch(error){
             if(error.response.status === 422){
                 setErrors(error.response.data.errors);
@@ -95,15 +98,17 @@ export default function HotelPictureForm({title,initialValues,onSubmit,nextPos})
                                 )}
                             </Field>
 
-                            <Button
-                                colorScheme="red"
-                                borderRadius={20}
-                                m={5}
-                                isLoading={isSubmitting}
-                                onClick={() => router.visit(`/hotels/`)}
-                            >
-                                Annuler
-                            </Button>
+                            <Link href={`/hotels/`} prefetch>
+                                <Button
+                                    colorScheme="red"
+                                    borderRadius={20}
+                                    m={5}
+                                >
+                                    Annuler
+                                </Button>
+                            </Link>
+
+
                             <Button
                                 colorScheme="purple"
                                 borderRadius={20}

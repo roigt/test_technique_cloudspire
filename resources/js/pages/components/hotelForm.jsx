@@ -1,7 +1,7 @@
 import { Box, Button, Center, FormControl, FormErrorMessage, FormLabel, Input, Text, Textarea, useToast } from '@chakra-ui/react';
 import { Field, Form, Formik } from 'formik';
 import axios from 'axios';
-import { router } from '@inertiajs/react';
+import { Link, router } from '@inertiajs/react';
 
 
 export default function HotelForm({initialValues,onSubmit, title}){
@@ -213,15 +213,18 @@ export default function HotelForm({initialValues,onSubmit, title}){
                                     </FormControl>
                                 )}
                             </Field>
-                            <Button
-                                mt={4}
-                                marginRight={10}
-                                colorScheme='red'
-                                borderRadius={20}
-                                onClick={() => router.visit(`/hotels/`)}
-                            >
-                                Annuler
-                            </Button>
+
+                            <Link href={`/hotels/`} prefetch>
+                                <Button
+                                    mt={4}
+                                    marginRight={10}
+                                    colorScheme='red'
+                                    borderRadius={20}
+                                >
+                                    Annuler
+                                </Button>
+                            </Link>
+
                             <Button
                                 mt={4}
                                 colorScheme='purple'

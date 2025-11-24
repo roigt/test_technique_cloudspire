@@ -17,6 +17,7 @@ import {
 import { Reorder, useDragControls } from "framer-motion";
 import { DeleteIcon, DragHandleIcon } from '@chakra-ui/icons';
 import axios from 'axios';
+import Header from '@/pages/components/header.jsx';
 
 export default function Index({ pictures: initialPictures, hotelId }) {
     const [pictures, setPictures] = useState(initialPictures);
@@ -107,12 +108,24 @@ export default function Index({ pictures: initialPictures, hotelId }) {
 
 
     return (
-        <Box p={4}>
+        <Box>
+            <Header
+                showSearch={false}
+            />
             <Center>
                 <Text
-                      fontSize="xl"
-                      fontWeight="bold"
-                      mb={4}>
+                    bgGradient='linear(to-r, teal.500, green.500)'
+                    _hover={{
+                        bgGradient: 'linear(to-r, red.500, yellow.500)',
+                    }}
+
+                    fontSize="xl"
+                    fontWeight="bold"
+                    backgroundColor="green"
+                    borderRadius="2xl"
+                    color={'whiteAlpha.900'}
+                    p={5}
+                    m={4}>
                     Glisser déposer pour ordonner les images
                 </Text>
             </Center>
@@ -175,69 +188,72 @@ function PictureItem({ picture, index, saving,onOpen,setSelectedHotel,setSelecte
     const controls = useDragControls();
 
     return (
-        <Reorder.Item
-            value={picture}
-            dragListener={false}
-            dragControls={controls}
-            style={{ listStyle: 'none' }}
-        >
-           <Center>
-               <Box
-                   width="50%"
-                   bg="whitesmoke"
-                   borderRadius="lg"
-                   p={3}
-                   mb={2}
-                   shadow="xl"
-                   display="flex"
-                   alignItems="center"
-                   gap={3}
-                   cursor={saving ? 'wait' : 'grab'}
-                   opacity={saving ? 0.6 : 1}
-                   _hover={{ shadow: 'lg' }}
-                   onPointerDown={(e) => controls.start(e)}
-               >
-                   {/* gestion du drag an drop*/}
-                   <DragHandleIcon boxSize={6} color="gray.400" />
+        <Box>
+            <Reorder.Item
+                value={picture}
+                dragListener={false}
+                dragControls={controls}
+                style={{ listStyle: 'none' }}
+            >
+                <Center>
+                    <Box
+                        width="50%"
+                        bg="whitesmoke"
+                        borderRadius="lg"
+                        p={3}
+                        mb={2}
+                        shadow="xl"
+                        display="flex"
+                        alignItems="center"
+                        gap={3}
+                        cursor={saving ? 'wait' : 'grab'}
+                        opacity={saving ? 0.6 : 1}
+                        _hover={{ shadow: 'lg' }}
+                        onPointerDown={(e) => controls.start(e)}
+                    >
+                        {/* gestion du drag an drop*/}
+                        <DragHandleIcon boxSize={6} color="gray.400" />
 
-                   {/* Box affichage de l image */}
-                   <Image
-                       borderRadius="2xl"
-                       boxSize="80px"
-                       objectFit="cover"
-                       src={`http://localhost:8000/storage/${picture.filepath}`}
-                       alt={`Position ${index + 1}`}
-                   />
+                        {/* Box affichage de l image */}
+                        <Image
+                            borderRadius="2xl"
+                            boxSize="80px"
+                            objectFit="cover"
+                            src={`http://localhost:8000/storage/${picture.filepath}`}
+                            alt={`Position ${index + 1}`}
+                        />
 
-                   {/* Information box */}
-                   <Box flex={1}>
-                       <Text fontWeight="bold">Position : {index + 1} </Text>
-                       <Text fontSize="sm" color="gray.500">
-                           ID: {picture.id}
-                       </Text>
-                   </Box>
-                   <Button
-                       w="100px"
-                       colorScheme="red"
-                       onClick={() => {
-                           setSelectedHotel(hotelId);
-                           setSelectedImage(picture.id)
-                           onOpen();
-                       }}
-                   >
-                       <DeleteIcon mr={1}/>
-                       Supprimer
-                   </Button>
-                   {/* message d'attente de sauvegarde*/}
-                   {saving && (
-                       <Text fontSize="xs" color="blue.500" fontWeight="bold">
-                           Sauvegarde...
-                       </Text>
-                   )}
-               </Box>
-           </Center>
+                        {/* Information box */}
+                        <Box flex={1}>
+                            <Text fontWeight="bold">Position : {index + 1} </Text>
+                            <Text fontSize="sm" color="gray.500">
+                                ID: {picture.id}
+                            </Text>
+                        </Box>
+                        <Button
+                            w="100px"
+                            colorScheme="red"
+                            onClick={() => {
+                                setSelectedHotel(hotelId);
+                                setSelectedImage(picture.id)
+                                onOpen();
+                            }}
+                        >
+                            <DeleteIcon mr={1}/>
+                            Supprimer
+                        </Button>
+                        {/* message d'attente de sauvegarde*/}
+                        {saving && (
+                            <Text fontSize="xs" color="blue.500" fontWeight="bold">
+                                Sauvegarde...
+                            </Text>
+                        )}
+                    </Box>
+                </Center>
 
 
-        </Reorder.Item>
+            </Reorder.Item>
+        </Box>
+
     );
 }

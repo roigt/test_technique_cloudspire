@@ -1,4 +1,4 @@
-import { Card, CardBody, Heading, Stack, Text, Image, Center, Box, Grid, GridItem, CardFooter, Button } from '@chakra-ui/react';
+import { Card, CardBody, Heading, Stack, Text, Image, Center, Box } from '@chakra-ui/react';
 import Header from '../components/header.jsx';
 import {getMainImage} from '../utils/hotelUtils.js';
 

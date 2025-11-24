@@ -5,7 +5,7 @@ import { Box } from '@chakra-ui/react';
 
 export default function Create({hotelId,nextPosition}) {
     const handleSubmit=async (formData)=>{
-        await axios.post(`/api/hotels/${hotelId}/pictures/`, formData, {
+        return await axios.post(`/api/hotels/${hotelId}/pictures/`, formData, {
             headers:{ 'Content-Type': 'multipart/form-data' }
         });
     }

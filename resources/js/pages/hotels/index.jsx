@@ -1,36 +1,34 @@
-
 import {
-    Table,
-    Thead,
-    Tbody,
-    Tr,
-    Th,
-    Td,
-    TableContainer,
-    Button,
-    Text,
-    Breadcrumb,
-    BreadcrumbItem,
-    BreadcrumbLink,
-    Image,
-    Box,
-    Link,
-    Input,
-    Spacer,
-    AlertDialogFooter,
+    AlertDialog,
     AlertDialogBody,
     AlertDialogContent,
-    AlertDialogOverlay,
+    AlertDialogFooter,
     AlertDialogHeader,
-    AlertDialog,
+    AlertDialogOverlay,
+    Box,
+    Button,
+    Center,
+    Image,
+    Spacer,
+    Table,
+    TableContainer,
+    Tbody,
+    Td,
+    Text,
+    Th,
+    Thead,
+    Tr,
     useDisclosure,
-    useToast, Center,
+    useToast,
 } from '@chakra-ui/react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import axios from 'axios';
-import { router } from '@inertiajs/react';
-import  { useEffect, useState,useRef } from 'react';
+import { router, Link  } from '@inertiajs/react';
+import Header from '../components/header.jsx';
+import { getMainImage} from '../utils/hotelUtils.js';
+import { ArrowBackIcon, ArrowForwardIcon, DeleteIcon } from '@chakra-ui/icons';
+export default function Index() {
 
-export default function Index({hotels:initialHotels}) {
 
     //toast bouton suppression d'hotel
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -40,28 +38,68 @@ export default function Index({hotels:initialHotels}) {
 
 
     //suivre l'état des hotels
-    const [hotels,setHotels] = useState(initialHotels);
+    const [hotels,setHotels] = useState([]);
     const [pagination,setPagination]=useState({});
     const [page, setPage]=useState(1);
+    const [loading,setLoading]=useState(false);
 
+
+    //recherche
+    const [searchQuery,setSearchQuery] =useState('');
+
+
+    //initialisation des données sur la page au lancement
     useEffect(() => {
-        //fetchHotels().then(r=>"");
-        setHotels(initialHotels);
-    }, [initialHotels]);
+        fetchHotels(page);
+    }, []);
 
+
+
+
+    //récupérer la page choisie par l'utilisateur (pagination)
     const fetchHotels = async(page=1)=>{
-        const response =await axios.get(`http://localhost:8000/api/hotels?page=${page}`);
+        const response=await axios.get(`http://localhost:8000/api/hotels?page=${page}`);
         setHotels(response.data.data)
-        setPagination(response.data)
+        setPagination(response.data.last_page)
         setPage(page)
     };
 
+    //gestion de la barre de recherche et actualisation des données de pagination
+    const searchBar =async(query)=>{
+        setSearchQuery(query)
+        const response=await axios.get(`http://localhost:8000/api/hotels`,{
+            params: {q:query}
+        });
+        setHotels(response.data.data)
+        setPagination(response.data.last_page)
+        setPage(page)
+    }
 
 
+    const handlePageChange=(page)=>{
+        //controle de l index de page pour ne pas déborder la pagination
+        if(page ===0 ) page=1;
+        if(page>pagination-1) page= pagination
+
+        fetchHotels(page)
+        window.scrollTo({top:0,behavior:'smooth'});
+    }
+
+
+    //si il n y a pas d'hôtel
+    if(!pagination){
+        return <Text>Aucune donnée disponible</Text>;
+    }
+
+
+    //gestion de la suppression d'un hôtel côté front
     const deleteHotel = async (hotelId)=> {
         try{
+
+            setHotels(prevHotels=>prevHotels.filter(hotel=>hotel.id !==hotelId));
+
             const response=await axios.delete(`http://localhost:8000/api/hotels/${hotelId}`);
-            router.reload({only:['hotels']});
+
             /* toast de confirmation de suppression*/
             toast({
                 title: response.data,
@@ -69,8 +107,10 @@ export default function Index({hotels:initialHotels}) {
                 position:'top-right',
                 isClosable: true,
             })
+            fetchHotels(page)
 
         }catch(error){
+            console.log(error)
             toast({
                 title:`Erreur lors de la suppression de l'hôtel`,
                 status: 'error',
@@ -83,66 +123,86 @@ export default function Index({hotels:initialHotels}) {
 
 
     return (
-        <>
+        <Box>
+            {/* Header */}
+            <Header showSearch={true} searchQuery={searchQuery} onSearchChange={searchBar} />
+            {/* Fin Header */}
 
-            <Box>
-                <Breadcrumb fontWeight="medium" fontSize="md" h={100} backgroundColor={'blue.200'}>
-                    <BreadcrumbItem>
-                        <BreadcrumbLink href="#">Home</BreadcrumbLink>
-                    </BreadcrumbItem>
-                    <BreadcrumbItem>
-                        <BreadcrumbLink href="">Detail</BreadcrumbLink>
-                    </BreadcrumbItem>
-                    <Spacer />
-                    <Input
-                        placeholder='type something to search'
-                        size='md'
-                        m={6}
-                        backgroundColor={'whiteAlpha.600'}
-                        width={500}
-
-                    />
-                </Breadcrumb>
-            </Box>
-
+            {/*Pagination*/}
             <Center>
-                <Button m={10}
-                        onClick={()=>fetchHotels(page - 1)}
-                > Précédent</Button>
-                <Button
-
-                         onClick={() => fetchHotels(page + 1)}
-                >Suivant </Button>
+                <Button m={10} onClick={() => handlePageChange(page - 1)}>
+                    <ArrowBackIcon/>
+                    Précédent
+                </Button>
+                <Button onClick={() => handlePageChange(page + 1)}>
+                    Suivant <ArrowForwardIcon />
+                </Button>
             </Center>
+            {/*Fin Pagination */}
+            <Spacer/>
+
+            {/* Bouton de création d'hôtel*/}
+            <Center>
+                <Link href={`/hotels/new`} prefetch>
+                    <Button w="200px" colorScheme="blue">
+                        Créer un hôtel
+                    </Button>
+                </Link>
+            </Center>
+            {/* Fin Bouton de création d'hôtel*/}
+
+            {/*Table d'affichage d'hôtels */}
             <Box>
                 <TableContainer>
                     <Table size="lg">
                         <Thead>
                             <Tr>
-                                <Th>Image</Th>
-                                <Th>Name</Th>
-                                <Th>Description</Th>
-                                <Th>Capacité Maximale</Th>
-                                <Th>Modification</Th>
-                                <Th>Suppression</Th>
+                                <Th>
+                                    <Center>Image</Center>
+                                </Th>
+                                <Th>
+                                    <Center>Name</Center>
+                                </Th>
+                                <Th>
+                                    <Center>Description</Center>
+                                </Th>
+                                <Th>
+                                    <Center>Capacité Maximale</Center>
+                                </Th>
+                                <Th>
+                                    <Center>Hotel</Center>
+                                </Th>
+                                <Th>
+                                    <Center>Images</Center>
+                                </Th>
                             </Tr>
                         </Thead>
                         <Tbody>
                             {hotels.map((hotel) => (
-                                <Tr key={hotel.id}>
+                                <Tr key={hotel.id} >
                                     <Td>
                                         <Link href={`/hotels/${hotel.id}`}>
-                                            <Button m={5}>
-                                                Detail
-                                            </Button>
+                                            <Button m={5}>Detail</Button>
                                         </Link>
-                                        <Image
-                                            borderRadius='full'
-                                            boxSize='100px'
-                                            objectFit='cover'
-                                            src= {hotel.firstPictures}
-                                            alt=""
-                                        />
+                                        {
+                                            (() => {//afficher l'image que quand l'hotel a déja une image principale
+                                                const firstImage = getMainImage(hotel);
+
+                                                return firstImage?.id  ? (
+                                                    <Image
+                                                        borderRadius="xl"
+                                                        boxSize="100px"
+                                                        objectFit="cover"
+                                                        src={`http://localhost:8000/storage/${firstImage?.filepath}`}
+                                                        alt="image"
+                                                    />
+                                                ) : (
+                                                    <Text fontSize={20}>Pas d'image</Text>
+                                                );
+                                            })()
+                                        }
+
+
                                     </Td>
                                     <Td>{hotel.name}</Td>
                                     <Td>
@@ -154,24 +214,56 @@ export default function Index({hotels:initialHotels}) {
                                     </Td>
                                     <Td>{hotel.max_capacity}</Td>
                                     <Td>
-                                        <Button
-                                            colorScheme='orange'
-                                            onClick={() => router.visit(`/hotels/${hotel.id}/update`)}
-                                        >
-                                            +Modifiers
-                                        </Button>
-                                    </Td>
-                                    <Td>
-                                        <Button
-                                            colorScheme='red'
-                                            onClick={()=>{
-                                                setSelectedHotel(hotel.id);
-                                                onOpen();
-                                            }}
-                                        >
-                                            Supprimer
-                                        </Button>
+                                        <Box display="grid" gridTemplateColumns="repeat(2, 1fr)" gap="8px">
+                                            <Link href={`/hotels/${hotel.id}/update`} prefetch>
+                                                <Button w="100px" colorScheme="orange">
+                                                    Modifier
+                                                </Button>
+                                            </Link>
 
+                                            <Button
+                                                w="100px"
+                                                colorScheme="red"
+                                                onClick={() => {
+                                                    setSelectedHotel(hotel.id);
+                                                    onOpen();
+                                                }}
+                                            >
+                                                <DeleteIcon mr={1}/>
+                                                Supprimer
+                                            </Button>
+
+                                            <Link href={`/hotels/${hotel.id}`} prefetch>
+                                                <Button w="100px">Detail</Button>
+                                            </Link>
+                                        </Box>
+                                    </Td>
+
+                                    <Td>
+                                        <Box display="grid" gridTemplateColumns="repeat(2, 1fr)" gap="8px">
+
+                                            <Link href={`/hotels/${hotel.id}/picture/`} method="get" as="button" prefetch>
+                                                <Button w="100px" colorScheme="yellow">+ Créer</Button>
+                                            </Link>
+
+                                            {
+                                                (() => {//afficher le bouton modifier que quand l'hotel a déja une image principale
+                                                    const firstImage = getMainImage(hotel);
+                                                    return firstImage?.id ? (
+                                                        <Link href={`/hotels/${hotel.id}/picture/${firstImage.id}`} method="get" as="button" prefetch>
+                                                            <Button w="100px" colorScheme="green">+Modifier</Button>
+                                                        </Link>
+                                                    ) : (
+                                                        <p></p>
+                                                    );
+                                                })()
+                                            }
+
+                                            <Link href={`/hotels/${hotel.id}/pictures`} method="get" as="button" prefetch>
+                                                <Button colorScheme="purple" >ordonner</Button>
+                                            </Link>
+
+                                        </Box>
                                     </Td>
                                 </Tr>
                             ))}
@@ -179,44 +271,37 @@ export default function Index({hotels:initialHotels}) {
                     </Table>
                 </TableContainer>
             </Box>
+            {/* Fin  Table d'affichage d'hôtel */}
 
             {/* Boite de dialogue de confirmation de suppression d un hôtel */}
-            <AlertDialog
-                isOpen={isOpen}
-                leastDestructiveRef={cancelRef}
-                onClose={onClose}
-            >
-
+            <AlertDialog isOpen={isOpen} leastDestructiveRef={cancelRef} onClose={onClose}>
                 <AlertDialogOverlay>
                     <AlertDialogContent>
-                        <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+                        <AlertDialogHeader fontSize="lg" fontWeight="bold">
                             Supprimer l'hôtel
                         </AlertDialogHeader>
 
-                        <AlertDialogBody>
-                            Voulez-vous vraiment supprimer cet hôtel??
-                        </AlertDialogBody>
+                        <AlertDialogBody>Voulez-vous vraiment supprimer cet hôtel??</AlertDialogBody>
 
                         <AlertDialogFooter>
                             <Button ref={cancelRef} onClick={onClose}>
-                                Cancel
+                                Annuler
                             </Button>
                             <Button
-                                colorScheme='red'
+                                colorScheme="red"
                                 ml={3}
-                                onClick={()=>{
+                                onClick={() => {
                                     deleteHotel(selectedHotel);
                                     onClose();
                                 }}
                             >
-                                Delete
+                                Supprimer
                             </Button>
                         </AlertDialogFooter>
                     </AlertDialogContent>
                 </AlertDialogOverlay>
             </AlertDialog>
             {/* fin boite de dialogue de suppression d'hotel*/}
-
-        </>
+        </Box>
     );
 }

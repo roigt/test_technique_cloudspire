@@ -10,11 +10,12 @@ use Inertia\Inertia;
 class HotelPage extends Controller
 {
     /**
-     * Afficher la page d'affichage d'hôtel sous forme tableai
+     * Afficher la page d'affichage d'hôtel sous forme tableau
      */
     public function index(){
-        return Inertia::render('hotels/home');
+        return Inertia::render('hotels/index');
     }
+
 
     /**
      * Affichage des détails d'un hôtel
