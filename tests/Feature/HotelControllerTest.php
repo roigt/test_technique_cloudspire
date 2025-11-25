@@ -134,9 +134,8 @@ class HotelControllerTest extends TestCase
      */
     public function test_hotels_pictures_exist_index(){
        $hotel = Hotel::factory()->create();
-       HotelPictures::factory()->create([
+       $picture=HotelPictures::factory()->create([
            'hotel_id'=>$hotel->id,
-           'filepath'=>'images/test_image.jpg',
        ]);
 
        $response = $this->getJson('/api/hotels');
@@ -151,6 +150,7 @@ class HotelControllerTest extends TestCase
        dump($response->json('data'));
 
        $this->assertCount(1,$response->json('data')[0]['pictures']);
+       $this->assertEquals($picture->hotel_id,$hotel->id);
     }
 
 
