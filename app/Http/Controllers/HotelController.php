@@ -7,6 +7,7 @@ use App\Models\Hotel;
 use Illuminate\Http\Request;
 
 
+
 class HotelController extends Controller
 {
     /**
@@ -14,17 +15,17 @@ class HotelController extends Controller
      */
     public function index(Request $request)
     {
+
         $query=Hotel::with('pictures')->latest();
 
         //filtre par q sur name ou city
         if($request->filled('q')){
             $q=$request->input('q');
 
-            $query->where(function($subQuery) use ($q){
-                $subQuery->where('name','like','%'.$q.'%')
-                         ->orWhere('city','like','%'.$q.'%');
-            });
+            $byName = Hotel::where('name', 'like', $q . '%');
+            $byCity = Hotel::where('city', 'like', $q . '%');
 
+            $query = $byName->union($byCity)->with('pictures');
         }
 
         //Tri selon le nom et l'ordre croissant
@@ -39,6 +40,7 @@ class HotelController extends Controller
         //pagination
         $perPage=$request->input('per_page',5);
         $hotels=$query->paginate($perPage);
+
 
         return response()->json($hotels);
 

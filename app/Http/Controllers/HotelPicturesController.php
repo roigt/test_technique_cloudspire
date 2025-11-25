@@ -11,21 +11,6 @@ use Illuminate\Validation\Rule;
 
 class HotelPicturesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        return HotelPictures::all();
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view('test_image',['hotels'=>Hotel::all()]);
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -68,7 +53,7 @@ class HotelPicturesController extends Controller
             ],404);
         }
 
-        $validated=$request->validate([
+        $request->validate([
            'image'=>['required','image','mimes:jpeg,png,webp','max:4096'],
            'position'=>['required','integer', 'min:1']
          ]);

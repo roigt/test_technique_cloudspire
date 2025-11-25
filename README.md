@@ -128,3 +128,14 @@ Tables :
     - `DELETE`
     - etc.
 
+
+### Améliorations
+- Ajouter un sytème d'authentification basé sur des rôles utilisateurs pour s'assurer qu'un utilisateur
+n'ayant pas créer un hôtel puisse le modifié ou le supprimé.
+
+- Ajouter des tests sur les interfaces React JS pour s'assurer des boutons, liens ou tableau attendu.
+
+- Gérer l'enrégistrement des fichiers grâce à un jobs pour rendre l'application plus fluide et réduire l'attente de la création du fichier et son
+enrégistrement en base de données.
+- Le UI (User Interface) peut être améliorer considérablement avec la mise en place d'une bonne maquette 
+- 

@@ -9,3 +9,11 @@ export const getMainImage=(hotel) =>{
 };
 
 
+export async function verifIfImageExists(filepath){
+     try{
+         const response = await fetch(`http://localhost:8000/storage/${filepath}`);
+         return response.ok;
+     }catch{
+         return false;
+     }
+}

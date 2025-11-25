@@ -16,7 +16,6 @@ fi
 
 echo "Nettoyage du cache"
 php artisan config:clear
-php artisan cache:clear
 php artisan view:clear
 php artisan route:clear
 
@@ -30,6 +29,9 @@ php artisan session:table
 echo "Création du lien symbolique de stockage"
 php artisan storage:link
 
+echo "Build assets"
+npm run build
 
 echo "Lancement du PHP-FPM..."
 php-fpm
+

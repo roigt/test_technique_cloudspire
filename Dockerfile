@@ -43,7 +43,7 @@ ENV WAYFINDER_ENABLED=false
 RUN composer install --no-interaction --optimize-autoloader --no-dev
 
 # Install NPM dependencies and build assets
-RUN npm ci && npm run build
+RUN npm ci
 
 COPY start.sh /usr/local/bin/start.sh
 RUN chmod +x /usr/local/bin/start.sh
@@ -52,6 +52,7 @@ CMD ["/usr/local/bin/start.sh"]
 #Modifier les permissions des dossiers
 RUN chown -R $user:www-data /var/www/storage /var/www/bootstrap/cache
 RUN chmod -R 775 /var/www/storage /var/www/bootstrap/cache
+
 
 USER $user
 

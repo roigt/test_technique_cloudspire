@@ -7,10 +7,7 @@ use App\Http\Controllers\pages\PicturePage;
 use Illuminate\Support\Facades\Route;
 
 
-//Route::get('/',function(){
-//    return redirect()->route('hotels');
-//});
-
+Route::redirect('/', '/hotels');
 //page images front
 Route::get('hotels/{id}/pictures',[PicturePage::class,'index']);
 Route::get('hotels/{id}/picture',[PicturePage::class,'create']);
@@ -37,7 +34,6 @@ Route::delete('/api/hotels/{hotel}',[HotelController::class,'destroy']);
 
 
 //hotels_pictures backend
-Route::get('/api/hotel/pictures',[HotelPicturesController::class,'create']);
 Route::patch('/api/hotels/{hotel}/pictures/reorder',[HotelPicturesController::class,'reorder']);
 Route::post('/api/hotels/{hotel}/pictures',[HotelPicturesController::class,'store']);
 Route::post('/api/hotels/{hotel}/pictures/{picture}',[HotelPicturesController::class,'update']);

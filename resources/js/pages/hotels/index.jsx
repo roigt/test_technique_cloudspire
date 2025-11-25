@@ -21,11 +21,11 @@ import {
     useDisclosure,
     useToast,
 } from '@chakra-ui/react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import {useEffect, useRef, useState } from 'react';
 import axios from 'axios';
-import { router, Link  } from '@inertiajs/react';
+import {  Link  } from '@inertiajs/react';
 import Header from '../components/header.jsx';
-import { getMainImage} from '../utils/hotelUtils.js';
+import { getMainImage, verifIfImageExists } from '../utils/hotelUtils.js';
 import { ArrowBackIcon, ArrowForwardIcon, DeleteIcon } from '@chakra-ui/icons';
 export default function Index() {
 
@@ -143,7 +143,7 @@ export default function Index() {
 
             {/* Bouton de création d'hôtel*/}
             <Center>
-                <Link href={`/hotels/new`} prefetch>
+                <Link href={`/hotels/new`}  prefetch>
                     <Button w="200px" colorScheme="blue">
                         Créer un hôtel
                     </Button>
@@ -164,6 +164,9 @@ export default function Index() {
                                     <Center>Name</Center>
                                 </Th>
                                 <Th>
+                                    <Center>City</Center>
+                                </Th>
+                                <Th>
                                     <Center>Description</Center>
                                 </Th>
                                 <Th>
@@ -181,14 +184,13 @@ export default function Index() {
                             {hotels.map((hotel) => (
                                 <Tr key={hotel.id} >
                                     <Td>
-                                        <Link href={`/hotels/${hotel.id}`}>
+                                        <Link href={`/hotels/${hotel.id}`} prefetch>
                                             <Button m={5}>Detail</Button>
                                         </Link>
                                         {
                                             (() => {//afficher l'image que quand l'hotel a déja une image principale
                                                 const firstImage = getMainImage(hotel);
-
-                                                return firstImage?.id  ? (
+                                                return firstImage?.id ? (
                                                     <Image
                                                         borderRadius="xl"
                                                         boxSize="100px"
@@ -205,6 +207,7 @@ export default function Index() {
 
                                     </Td>
                                     <Td>{hotel.name}</Td>
+                                    <Td>{hotel.city}</Td>
                                     <Td>
                                         <Box w="200px" overflow="hidden">
                                             <Text isTruncated noOfLines={[1, 2, 3]} whiteSpace="wrap" maxW="200px">
@@ -233,7 +236,7 @@ export default function Index() {
                                                 Supprimer
                                             </Button>
 
-                                            <Link href={`/hotels/${hotel.id}`} prefetch>
+                                            <Link href={`/hotels/${hotel.id}`}  prefetch>
                                                 <Button w="100px">Detail</Button>
                                             </Link>
                                         </Box>
@@ -242,14 +245,14 @@ export default function Index() {
                                     <Td>
                                         <Box display="grid" gridTemplateColumns="repeat(2, 1fr)" gap="8px">
 
-                                            <Link href={`/hotels/${hotel.id}/picture/`} method="get" as="button" prefetch>
+                                            <Link href={`/hotels/${hotel.id}/picture/`} method="get" as="button"  prefetch={['mount', 'hover']}>
                                                 <Button w="100px" colorScheme="yellow">+ Créer</Button>
                                             </Link>
 
                                             {
                                                 (() => {//afficher le bouton modifier que quand l'hotel a déja une image principale
                                                     const firstImage = getMainImage(hotel);
-                                                    return firstImage?.id ? (
+                                                    return firstImage?.id  ? (
                                                         <Link href={`/hotels/${hotel.id}/picture/${firstImage.id}`} method="get" as="button" prefetch>
                                                             <Button w="100px" colorScheme="green">+Modifier</Button>
                                                         </Link>
