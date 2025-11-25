@@ -11,11 +11,21 @@ RUN apt-get update && apt-get install -y \
     libpng-dev \
     libonig-dev \
     libxml2-dev \
+    libjpeg62-turbo-dev \
+    libwebp-dev \
+    libfreetype6-dev \
     zip \
     unzip \
     nodejs \
     npm \
     netcat-openbsd \
+    libpng-dev \
+    libwebp-dev \
+    libfreetype6-dev \
+    && docker-php-ext-configure gd \
+            --with-freetype \
+            --with-jpeg \
+            --with-webp \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -39,10 +49,10 @@ COPY --chown=$user:$user . /var/www
 
 ENV WAYFINDER_ENABLED=false
 
-# Install Composer dependencies
+#Installer les dépendances de composer
 RUN composer install --no-interaction --optimize-autoloader --no-dev
 
-# Install NPM dependencies and build assets
+#Installer les dépendances npm
 RUN npm ci
 
 COPY start.sh /usr/local/bin/start.sh
@@ -51,8 +61,6 @@ CMD ["/usr/local/bin/start.sh"]
 
 #Modifier les permissions des dossiers
 RUN chown -R $user:www-data /var/www/storage /var/www/bootstrap/cache
-RUN chmod -R 775 /var/www/storage /var/www/bootstrap/cache
-
 
 USER $user
 

@@ -31,6 +31,7 @@ class HotelPicturesController extends Controller
             'filepath'=>$imagePath,
             'filesize'=>$fileSize,
             'position'=>$request->position,
+            'displayable'=>true
         ]);
 
         return response()->json([
@@ -71,6 +72,7 @@ class HotelPicturesController extends Controller
             'filepath'=>$imagePath,
             'filesize'=>$fileSize,
             'position'=>$request->position,
+            'displayable'=>true
         ]);
 
         return  response()->json([

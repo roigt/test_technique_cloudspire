@@ -25,7 +25,7 @@ import {useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import {  Link  } from '@inertiajs/react';
 import Header from '../components/header.jsx';
-import { getMainImage, verifIfImageExists } from '../utils/hotelUtils.js';
+import { getMainImage} from '../utils/hotelUtils.js';
 import { ArrowBackIcon, ArrowForwardIcon, DeleteIcon } from '@chakra-ui/icons';
 export default function Index() {
 
@@ -39,6 +39,7 @@ export default function Index() {
 
     //suivre l'état des hotels
     const [hotels,setHotels] = useState([]);
+    const [initialHotels,setInitialHotels]=useState([]);
     const [pagination,setPagination]=useState({});
     const [page, setPage]=useState(1);
     const [loading,setLoading]=useState(false);
@@ -67,21 +68,28 @@ export default function Index() {
     //gestion de la barre de recherche et actualisation des données de pagination
     const searchBar =async(query)=>{
         setSearchQuery(query)
+
+        //si le champ de recherche est vide revenir à la page 1
+        if(query.trim() ===""){
+            fetchHotels(1);
+            return;
+        }
+
         const response=await axios.get(`http://localhost:8000/api/hotels`,{
             params: {q:query}
         });
+
         setHotels(response.data.data)
         setPagination(response.data.last_page)
-        setPage(page)
+        setPage(response.data.current_page)
     }
 
 
-    const handlePageChange=(page)=>{
+    const handlePageChange=(pageNumber)=>{
         //controle de l index de page pour ne pas déborder la pagination
-        if(page ===0 ) page=1;
-        if(page>pagination-1) page= pagination
-
-        fetchHotels(page)
+        if(pageNumber ===0 ) pageNumber=1;
+        if(pageNumber>pagination-1) pageNumber= pagination
+        fetchHotels(pageNumber)
         window.scrollTo({top:0,behavior:'smooth'});
     }
 
@@ -110,7 +118,6 @@ export default function Index() {
             fetchHotels(page)
 
         }catch(error){
-            console.log(error)
             toast({
                 title:`Erreur lors de la suppression de l'hôtel`,
                 status: 'error',
@@ -130,11 +137,18 @@ export default function Index() {
 
             {/*Pagination*/}
             <Center>
-                <Button m={10} onClick={() => handlePageChange(page - 1)}>
+                <Button m={10}
+                        onClick={() => handlePageChange(page - 1)}
+                        isDisabled={page<=1}
+                 >
                     <ArrowBackIcon/>
                     Précédent
                 </Button>
-                <Button onClick={() => handlePageChange(page + 1)}>
+                <Text mr={8}>{page}</Text>
+                <Button
+                    onClick={() => handlePageChange(page + 1)}
+                    isDisabled={page>=pagination}
+                >
                     Suivant <ArrowForwardIcon />
                 </Button>
             </Center>
@@ -190,13 +204,15 @@ export default function Index() {
                                         {
                                             (() => {//afficher l'image que quand l'hotel a déja une image principale
                                                 const firstImage = getMainImage(hotel);
-                                                return firstImage?.id ? (
+                                                //afficher que les images qui sont affichables
+                                                return firstImage?.id && firstImage?.displayable ? (
                                                     <Image
                                                         borderRadius="xl"
                                                         boxSize="100px"
                                                         objectFit="cover"
                                                         src={`http://localhost:8000/storage/${firstImage?.filepath}`}
                                                         alt="image"
+                                                        loading="lazy"
                                                     />
                                                 ) : (
                                                     <Text fontSize={20}>Pas d'image</Text>

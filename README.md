@@ -11,8 +11,7 @@
 - **Inertia js**
 - **React Js**
 - **Chackra UI**
-- **Docker**
-
+- **Docker version 28.0.4**
 ---
 
 
@@ -27,6 +26,10 @@ docker.
 
 **Architecture logicielle de l'application**
 ![Architecture logicielle utilisée](public/readme-images/archi-test_technique.png)
+
+**Base de données**
+![MCD](public/readme-images/mcd-base-de-données.png)
+
 ---
 ## Lancement du projet
 ### Pré-requis
@@ -35,7 +38,8 @@ Installer composer, une version de php >=8.0 et node js version >=20
 ### Installation et lancement en local
 - Après avoir clooner le projet, aller à la racine de votre projet et lancer les commandes suivantes:
 - Avoir également une base de données MySQL fonctionnel à configurer en fonction des informations disponible dans le fichier 
-.env.example en faire une copie et remplir convenablement avec les informations de connexion de votre base de données.
+.env.example en faire une copie et le nommée .env,  remplir ce fichier .env convenablement avec les informations de
+connexion de votre base de données.
 - S'assurer que les ports 8000 et 5173 soient disponibles.
 
 ```bash
@@ -47,15 +51,18 @@ php artisan migrate --seed  #Migration + données de tes pour populer votre base
 Ensuite pour lancer l'application vous avez deux options:
 ### Option 1 - Une seule commande 
 ```bash
+
 composer run dev
 ```
 
 ### Option 2 - Séparé: dans deux terminales
 ```bash
+
 php artisan serve 
 ```
 et dans un autre terminal 
 ```bash
+
 npm run dev
 ```
 C'est fait !! si tout ce passe bien votre application sera disponible sur: http://localhost:8000/hotels
@@ -64,12 +71,18 @@ C'est fait !! si tout ce passe bien votre application sera disponible sur: http:
 Pour obtenir l'application sous forme de conteneur prêt à l'emploi, 
 il faut suivre les étapes préalables et faire à la racine du projet clooner:
 ```bash
+
 docker compose up -d --build  #builder et démarrer l'application en mode détaché
 ou en deux commandes
 docker compose build app  et après, docker compose up -d
 
- docker compose logs -f app #pour suivre les logs du service de l'application
+docker compose logs -f app #pour suivre les logs du service de l'application
 #et s'assurer qu'elle a complètement démarré avant de s'y connecter
+#voici la sortie de logs à obtenir pour savoir que le serveur nginx à démarrer 
+# et prêt à servir les pages
+
+![sortie fin de build]()
+
 ```
 
 ---
@@ -129,6 +142,13 @@ Tables :
     - etc.
 
 
+### Notez bien
+- Si vous chargez une image pour un hôtel déjà existant, il est probable que vous ne la voyiez pas apparaître sur la page /hotels, car votre nouvelle image se trouve à une position inférieure.
+Pour l'afficher sur la page /hotels, cliquez sur le bouton Ordonner, puis faites glisser votre nouvelle image pour la placer en position 1.
+Après cette action, l’image sera correctement affichée à l’écran.
+
+### Durée de réalisation [3 jours]
+
 ### Améliorations
 - Ajouter un sytème d'authentification basé sur des rôles utilisateurs pour s'assurer qu'un utilisateur
 n'ayant pas créer un hôtel puisse le modifié ou le supprimé.
@@ -137,5 +157,5 @@ n'ayant pas créer un hôtel puisse le modifié ou le supprimé.
 
 - Gérer l'enrégistrement des fichiers grâce à un jobs pour rendre l'application plus fluide et réduire l'attente de la création du fichier et son
 enrégistrement en base de données.
-- Le UI (User Interface) peut être améliorer considérablement avec la mise en place d'une bonne maquette 
-- 
+- Le UI (User Interface) peut être améliorer considérablement avec la mise en place d'une bonne maquette.
+

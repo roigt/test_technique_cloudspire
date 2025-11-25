@@ -10,7 +10,7 @@ class HotelPictures extends Model
     /** @use HasFactory<\Database\Factories\HotelPicturesFactory> */
     use HasFactory;
 
-    protected $fillable=['hotel_id','filepath','filesize','position'];
+    protected $fillable=['hotel_id','filepath','filesize','position','displayable'];
 
     public function hotel(){
         return $this->belongsTo(Hotel::class);

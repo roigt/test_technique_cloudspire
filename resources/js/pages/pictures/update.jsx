@@ -15,7 +15,7 @@ export default function Update({hotelId,pictureId,image}) {
         image: image.filepath,
         position:image.position,
     }
-    console.log(old_values);
+
     return <Box>
                 <Header
                     showSearch={false}

@@ -1,6 +1,7 @@
 import { Box, Button, Center, FormControl, FormErrorMessage, FormLabel, Input, Text, Toast, useToast } from '@chakra-ui/react';
 import { Field, Form, Formik } from 'formik';
 import { Link, router } from '@inertiajs/react';
+import { useState } from 'react';
 
 
 export default function HotelPictureForm({title,initialValues,onSubmit,nextPos}) {
@@ -15,7 +16,9 @@ export default function HotelPictureForm({title,initialValues,onSubmit,nextPos})
 
     const handleSubmit =async (values,actions) => {
         const {setSubmitting, setErrors}=actions;
+
         try{
+
             const formData = new FormData();
             formData.append('image', values.image);
             formData.append('position', values.position);
@@ -49,7 +52,7 @@ export default function HotelPictureForm({title,initialValues,onSubmit,nextPos})
                     position: 'top-right',
                     duration:3000,
                     isClosable:true
-                })
+                });
             }
         }finally {
             setSubmitting(false);
@@ -103,6 +106,7 @@ export default function HotelPictureForm({title,initialValues,onSubmit,nextPos})
                                     colorScheme="red"
                                     borderRadius={20}
                                     m={5}
+                                    isDisabled={isSubmitting}
                                 >
                                     Annuler
                                 </Button>

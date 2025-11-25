@@ -13,7 +13,7 @@ class HotelPage extends Controller
      * Afficher la page d'affichage d'hôtel sous forme tableau
      */
     public function index(){
-        return Inertia::render('hotels/index');
+        return Inertia::render('hotels/index',);
     }
 
 

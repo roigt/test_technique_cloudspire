@@ -22,8 +22,8 @@ class HotelController extends Controller
         if($request->filled('q')){
             $q=$request->input('q');
 
-            $byName = Hotel::where('name', 'like', $q . '%');
-            $byCity = Hotel::where('city', 'like', $q . '%');
+            $byName = Hotel::where('name', 'like','%'. $q . '%');
+            $byCity = Hotel::where('city', 'like','%'. $q . '%');
 
             $query = $byName->union($byCity)->with('pictures');
         }

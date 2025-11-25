@@ -2,6 +2,7 @@ import { Box, Button, Center, FormControl, FormErrorMessage, FormLabel, Input, T
 import { Field, Form, Formik } from 'formik';
 import axios from 'axios';
 import { Link, router } from '@inertiajs/react';
+import { useState } from 'react';
 
 
 export default function HotelForm({initialValues,onSubmit, title}){
@@ -41,6 +42,7 @@ export default function HotelForm({initialValues,onSubmit, title}){
 
                     onSubmit={async (values, actions) => {
                         const { setSubmitting, setErrors } = actions;
+
                         try{
 
                            const response= await onSubmit(values)
@@ -49,7 +51,8 @@ export default function HotelForm({initialValues,onSubmit, title}){
                                 status:"success",
                                 position:'top-right',
                                 duration:3000,
-                                isClosable:true
+                                isClosable:true,
+                                onCloseComplete: () => router.visit('/hotels')
                             })
                         }catch(error){
                             if (error.response && error.response.status === 422) {
@@ -220,6 +223,7 @@ export default function HotelForm({initialValues,onSubmit, title}){
                                     marginRight={10}
                                     colorScheme='red'
                                     borderRadius={20}
+                                    isDisabled={props.isSubmitting}
                                 >
                                     Annuler
                                 </Button>
