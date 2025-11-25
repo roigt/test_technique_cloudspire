@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\HotelRequest;
 use App\Models\Hotel;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Log;
 
 
 class HotelController extends Controller
@@ -15,6 +16,10 @@ class HotelController extends Controller
      */
     public function index(Request $request)
     {
+        //logger la requête reçu
+        Log::info('Appel de Hotel index()',[
+            'paramètre'=>$request->all()
+        ]);
 
         $query=Hotel::with('pictures')->latest();
 
@@ -35,15 +40,19 @@ class HotelController extends Controller
         //verifier que la colonne existe
         if(in_array($sort,['name','city','price_per_night','max_capacity','created_at'])){
             $query->orderBy($sort,$order);
+        }else{
+            Log::warning("Column invalide a trié:{$sort}");
         }
 
         //pagination
         $perPage=$request->input('per_page',5);
         $hotels=$query->paginate($perPage);
 
-
+        Log::info('Les hôtels trouvés',[
+            'nombre'=>$hotels->count(),
+            'total'=>$hotels->total(),
+        ]);
         return response()->json($hotels);
-
     }
 
 
@@ -53,8 +62,9 @@ class HotelController extends Controller
      */
     public function store(HotelRequest $request)
     {
-       $request->validated();
-       Hotel::create([
+        $request->validated();
+
+       $hotel=Hotel::create([
            'name'=>$request->input('name'),
            'address1'=>$request->input('address1'),
            'address2'=>$request->input('address2'),
@@ -67,6 +77,9 @@ class HotelController extends Controller
            'description'=>$request->input('description'),
            'price_per_night'=>$request->input('price_per_night'),
        ]);
+
+       Log::info(" Ajout d'un hotel terminé avec succès !!",['hotel_id',$hotel->id]);
+
        return response()->json('Hôtel créer avec succès',201);
     }
 
@@ -99,6 +112,8 @@ class HotelController extends Controller
             'description'=>$request->input('description'),
             'price_per_night'=>$request->input('price_per_night'),
         ]);
+
+        Log::info("Modification de l'hôtel éffectuée avec succès", ['hotel_id'=>$hotel->id]);
         return response()->json('Hôtel modifié avec succès!!',200);
     }
 
@@ -108,6 +123,8 @@ class HotelController extends Controller
     public function destroy(Hotel $hotel)
     {
         $hotel->delete();
+        Log::info("Suppression de l'hôtel réussie!!",['hotel_id'=>$hotel->id]);
+
         return response()->json('Hôtel supprimé avec succès!!',200);
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Hotel;
 use App\Models\HotelPictures;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
@@ -23,6 +24,7 @@ class HotelPicturesController extends Controller
             'position'=>['required','integer', 'integer']
         ]);
 
+
         $fileSize=$request->file('image')->getSize()/1024 ; //kilo octet
         $imagePath= $request->file('image')->store('images','public');
 
@@ -34,6 +36,17 @@ class HotelPicturesController extends Controller
             'displayable'=>true
         ]);
 
+        if(!$picture){
+            Log::error("Echec de l'ajout de l'image à l'hotel",[
+                'hotel_id'=>$hotel->id
+            ]);
+            return response()->json([
+                'message'=>"Erreur lors de l'enrégistrement de l'image",
+                'status'=>500
+            ],500);
+        }
+
+        Log::info("Ajout de l'image éffectué avec succès!!");
         return response()->json([
             'message'=>'Enrégistrement de l image éffectué avec succes!!',
             'data'=> $picture,
@@ -47,8 +60,10 @@ class HotelPicturesController extends Controller
      */
     public function update(Request $request, Hotel $hotel,HotelPictures $picture)
     {
+        Log::info("Tentative de mise à jour de l'image d'un hôtel ");
 
         if($picture->hotel_id!== $hotel->id){
+            Log::error("L'image a supprimée n'appartient pas à l'hotel");
             return response()->json([
                 'error'=>'This picture does not belong to this hotel'
             ],404);
@@ -62,10 +77,13 @@ class HotelPicturesController extends Controller
         //supprimer l'ancienne image si elle existe
         if($picture->filepath && Storage::disk('public')->exists($picture->filepath)){
             Storage::disk('public')->delete($picture->filepath);
+            Log::info("Suppression de l'ancienne image réussie!!...");
         }
+
 
         $imagePath=$request->file('image')->store('images','public');
         $fileSize= $request->file('image')->getSize()/1024; //en k octet
+        Log::info('Enrégistrement de la nouvelle image terminé');
 
 
         $picture->update([
@@ -75,6 +93,7 @@ class HotelPicturesController extends Controller
             'displayable'=>true
         ]);
 
+        Log::info('Modification de l image éffectuée avec succes!!!',['picture'=>$picture]);
         return  response()->json([
             'message'=>"Modification de l'image éffectuée avec succes!!",
             'data'=> $picture->fresh(),
@@ -88,6 +107,7 @@ class HotelPicturesController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function reorder(Request $request, Hotel $hotel){
+
         $validated=$request->validate([
             'pictures' => ['required', 'array'],
             'pictures.*.id' => [
@@ -104,6 +124,7 @@ class HotelPicturesController extends Controller
                 ->update(['position'=>$picture['position']]);
         }
 
+        Log::info('Réorganisation des images dans un nouvel ordre éffectuée avec succes!!!');
         return response()->json([
             'message'=>'Réorganisation de la position des images éffectuée avec succès.',
             'status'=>200
@@ -115,13 +136,17 @@ class HotelPicturesController extends Controller
      */
     public function destroy(Hotel $hotel, HotelPictures $picture)
     {
+
         if($picture->hotel_id !== $hotel->id) return response()->json(['error'=>'Cette image n appartient pas à cet hôtel.']);
 
         if($picture->filepath && Storage::disk('public')->exists($picture->filepath)){
             Storage::disk('public')->delete($picture->filepath);
         }
-
+        //suppresion de l'image
         $picture->delete();
+
+        Log::info("Suppression de l'image de l'hotel éffectué avec succes!!!",['hotel_id'=>$hotel->id]);
+
         return response()->json(['message'=>'Suppression de l image éffectuée avec succès!!']);
     }
 }
