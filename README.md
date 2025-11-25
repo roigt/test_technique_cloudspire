@@ -118,6 +118,10 @@ Sortie à la fin du build de l'application docker
 ### ORM
 - Utilisation d’Eloquent pour les requêtes SQL
 
+### Test
+- `hotelControllerTest ` teste les endpoints du contrôleur du model Hotel
+- `hotelPicturesTest` teste les endpoints du contrôleur du model HotelPicture
+
 ### Base de données MySQL
 Tables :
 - `hotels`
