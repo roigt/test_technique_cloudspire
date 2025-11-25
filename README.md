@@ -12,6 +12,7 @@
 - **React Js**
 - **Chackra UI**
 - **Docker version 28.0.4**
+- **PhpStorm IDE**
 ---
 
 
@@ -41,17 +42,20 @@ Installer composer, une version de php >=8.0 et node js version >=20
 .env.example en faire une copie et le nommée .env,  remplir ce fichier .env convenablement avec les informations de
 connexion de votre base de données.
 - S'assurer que les ports 8000 et 5173 soient disponibles.
-
+**git clone https://github.com/roigt/test_technique_cloudspire.git** commande pour clooner le projet
 ```bash
 npm install  #Installation des dépendances côté front
+npm run build # builder les assets
 composer install #Installation des dépendances côté backend
+cp .\.env.example .env  #faire une copie du fichier .env.examble -> .env et remplir les infos de la bd ou laisser pour utiliser SqLite (fichier db)
+php artisan key:generate # générer la clé de l'application
+php artisan storage:link  # Créer le lien symbolique entre storage et public (images)
 php artisan migrate --seed  #Migration + données de tes pour populer votre base de données
 
 ```
 Ensuite pour lancer l'application vous avez deux options:
 ### Option 1 - Une seule commande 
 ```bash
-
 composer run dev
 ```
 
@@ -81,10 +85,10 @@ docker compose logs -f app #pour suivre les logs du service de l'application
 #voici la sortie de logs à obtenir pour savoir que le serveur nginx à démarrer 
 # et prêt à servir les pages
 
-![sortie fin de build]()
-
+docker compose down -v  #pour arrêter l'application et supprimé les conteneurs exécutés en arrière-plan 
 ```
-
+Sortie à la fin du build de l'application docker
+![sortie fin de build](public/readme-images/ready-docker-nginx.png)
 ---
 ##  Backend (Laravel)
 
